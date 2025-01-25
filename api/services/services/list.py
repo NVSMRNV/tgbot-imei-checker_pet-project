@@ -1,0 +1,31 @@
+import requests
+from decouple import config
+
+
+class ListIMEIServiceService:
+    def __init__(self, inputs, *args, **kwargs):
+        self.result = None
+        self.errors = None
+        self.response_status = None
+        self.inputs = inputs
+
+    def process(self):
+        url = f'{config('IMEICHECK_API_BASEURL', cast=str)}/v1/services'
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.inputs['token']}',
+            'Accept-Language': 'en',
+        }   
+        response = requests.request(
+            method='GET', 
+            url=url, 
+            headers=headers
+        )
+
+        if response.status_code == 200:
+            self.result = response.json()
+        else:
+            self.errors = {'error': 'Failed to retrieve services', 'details': response.text}
+        
+        self.response_status = response.status_code
+        return self

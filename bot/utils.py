@@ -1,4 +1,7 @@
+import json
 import requests
+
+from decouple import config
 
 
 WHITELIST = [1172137145]
@@ -13,19 +16,35 @@ def is_imei_valid(imei: str) -> bool:
 
 
 def get_imei_info_from_api(imei: str) -> None:
-    url = f'http://localhost:8000/api/check-imei/'
-    token = ''
+    url = f'http://localhost:8000/api/imeis/checks/'
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    body = json.dumps({
+        'imei': imei,
+        'token': config('IMEICHECK_API_TOKEN_LIVE', cast=str)
+    })
+    response = requests.request(
+        method='POST',
+        url=url,
+        data=body,
+    )
+    return response.json()
 
-    response = requests.post(
-        url,
-        json={
-            'imei': imei
-        },
-        headers={
-            'Authorization': f'Token {token}'
-        }
+
+def get_service_list() -> list:
+    url = f'http://localhost:8000/api/imeis/services/'
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    body = json.dumps({
+        'token': config('IMEICHECK_API_TOKEN_LIVE', cast=str)
+    })
+    response = requests.request(
+        method='POST',
+        url=url,
+        headers=headers,
+        data=body,            
     )
 
-    if response.status_code == 200:
-        return response.json()
-    return {'error': f'Ошибка запроса: {response.status_code}'}
+    return response.json()
