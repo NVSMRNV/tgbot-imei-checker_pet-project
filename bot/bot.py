@@ -1,13 +1,12 @@
 import json
 import telebot
-from prettytable import PrettyTable
+
 from decouple import config
 
 from utils import (
-    beautify,
     is_user_allowed,
     is_imei_valid,
-    get_imei_info_from_api,
+    get_imei_check,
     get_service_list,
 )
 
@@ -23,7 +22,10 @@ def send_welcome(message: telebot.types.Message) -> None:
         bot.send_message(message.chat.id, 'У Вас нет доступа к фунционалу этого бота.')
         return 
     
-    bot.send_message(message.chat.id, 'Привет! Меня зовут Чекер. \nОтправь мне IMEI для проверки.')
+    bot.send_message(
+        message.chat.id,
+        'Привет! Меня зовут Чекер. \nОтправь мне IMEI для проверки.'
+    )
 
 
 @bot.message_handler(commands=['services'])
@@ -58,7 +60,7 @@ def send_service_list(message: telebot.types.Message) -> None:
 
 
 @bot.message_handler()
-def check_imei(message: telebot.types.Message) -> None:
+def send_info_by_imei(message: telebot.types.Message) -> None:
     uid = message.from_user.id
     if not is_user_allowed(uid):
         bot.send_message(message.chat.id, 'У Вас нет доступа к фунционалу этого бота.')
@@ -69,7 +71,7 @@ def check_imei(message: telebot.types.Message) -> None:
         bot.send_message(message.chat.id, 'Некорректный IMEI. Проверьте правильность ввода.')
         return
 
-    response = get_imei_info_from_api(imei)
+    response = get_imei_check(imei)
     if 'error' in response:
         details = json.loads(response['details'])
         bot.send_message(message.chat.id, f'Возникла ошибка: \n{response['error']}\n{details['message']}')

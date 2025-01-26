@@ -15,7 +15,7 @@ def is_imei_valid(imei: str) -> bool:
     return imei.isdigit() and len(imei) == 15
 
 
-def get_imei_info_from_api(imei: str) -> None:
+def get_imei_check(imei: str) -> None:
     url = f'http://localhost:8000/api/imeis/checks/'
     headers = {
         'Content-Type': 'application/json'
@@ -27,6 +27,7 @@ def get_imei_info_from_api(imei: str) -> None:
     response = requests.request(
         method='POST',
         url=url,
+        headers=headers,
         data=body,
     )
     return response.json()
