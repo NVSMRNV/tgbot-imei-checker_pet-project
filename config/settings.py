@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     
     #! Third party
     'rest_framework',
+    'rest_framework_simplejwt',
 
     #! Local
     'api',
@@ -94,3 +95,11 @@ STATIC_URL = 'static/'
 
 #! Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#! Rest
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}

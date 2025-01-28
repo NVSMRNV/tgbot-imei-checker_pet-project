@@ -6,8 +6,11 @@ from decouple import config
 from utils import (
     is_user_allowed,
     is_imei_valid,
-    get_imei_check,
+)
+
+from reqs import (
     get_service_list,
+    create_imei_check,
 )
 
 
@@ -68,13 +71,18 @@ def send_info_by_imei(message: telebot.types.Message) -> None:
         bot.send_message(message.chat.id, 'Некорректный IMEI. Проверьте правильность ввода.')
         return
 
-    response = get_imei_check(imei)
+    response = create_imei_check(imei)
     if 'error' in response:
-        details = json.loads(response['details'])
-        bot.send_message(message.chat.id, f'Возникла ошибка: \n{response['error']}\n{details['message']}')
+        bot.send_message(
+            message.chat.id,
+            f'Возникла ошибка: \n{response['error']}\n{response['details']}'
+        )
         return
 
-    bot.send_message(message.chat.id, f'Вот информация по Вашему запросу: \n{response}')
+    bot.send_message(
+        message.chat.id,
+        f'Вот информация по Вашему запросу: \n{response}'
+    )
 
 
 def run() -> None:

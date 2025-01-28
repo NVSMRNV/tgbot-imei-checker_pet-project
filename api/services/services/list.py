@@ -3,7 +3,7 @@ from decouple import config
 
 
 class ListIMEIServiceService:
-    def __init__(self, inputs, *args, **kwargs):
+    def __init__(self, inputs=None, *args, **kwargs):
         self.result = None
         self.errors = None
         self.response_status = None
@@ -13,7 +13,7 @@ class ListIMEIServiceService:
         url = f'{config('IMEICHECK_API_BASEURL', cast=str)}/v1/services'
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': f'Bearer {self.inputs['token']}',
+            'Authorization': f'Bearer {config('IMEICHECK_API_TOKEN_LIVE', cast=str)}',
             'Accept-Language': 'en',
         }   
         response = requests.request(
@@ -25,7 +25,7 @@ class ListIMEIServiceService:
         if response.status_code == 200:
             self.result = response.json()
         else:
-            self.errors = {'error': 'Failed to retrieve services', 'details': response.text}
+            self.errors = {'error': 'Не удалось получить список сервисов.', 'details': response.text}
         
         self.response_status = response.status_code
         return self

@@ -5,7 +5,7 @@ from decouple import config
 
 
 class CreateIMEICheckservice:
-    def __init__(self, inputs, *args, **kwargs):
+    def __init__(self, inputs=None, *args, **kwargs):
         self.result = None
         self.errors = None
         self.response_status = None
@@ -15,11 +15,11 @@ class CreateIMEICheckservice:
         url = f'{config('IMEICHECK_API_BASEURL', cast=str)}/v1/checks'
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': f'Bearer {self.inputs['token']}',
+            'Authorization': f'Bearer {config('IMEICHECK_API_TOKEN_LIVE', cast=str)}',
         } 
         body = json.dumps({
-            'deviceId': self.inputs['imei'],
-            'serviceId': 22
+            'deviceId': self.inputs['deviceId'],
+            'serviceId': self.inputs['serviceId']
         }) 
         response = requests.request(
             method='POST',
@@ -31,7 +31,7 @@ class CreateIMEICheckservice:
         if response.status_code == 201:
             self.result = response.json()
         else:
-            self.errors = {'error': 'Failed to create check', 'details': response.text}
+            self.errors = {'error': 'Не удалось выполнить проверку.', 'details': response.text}
         
         self.response_status = response.status_code
         return self

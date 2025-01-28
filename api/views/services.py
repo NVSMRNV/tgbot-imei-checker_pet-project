@@ -11,7 +11,7 @@ from api.serializers.services.retrieve import RetriveIMEIServiceSerializer
 class ListIMEIServiceAPIView(APIView):
     permission_classes = [AllowAny]
 
-    def post(self, request: Request, *args, **kwargs) -> Response:
+    def get(self, request: Request, *args, **kwargs) -> Response:
         output = ListIMEIServiceService(request.data).process()
         if output.result:
             serializer = RetriveIMEIServiceSerializer(output.result, many=True)
