@@ -60,9 +60,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 #! Database
 DATABASES = {
-    'default': {
-        'default': dj_database_url.config(default=config('SQLITE_URL'))
-    }
+    'default': dj_database_url.config(default=config('SQLITE_URL'))
 }
 
 
@@ -93,6 +91,7 @@ LANGUAGE_CODE = 'en-us'
 #! Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
 
+
 #! Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -103,3 +102,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+
+#! User model
+AUTH_USER_MODEL = 'api.User'
