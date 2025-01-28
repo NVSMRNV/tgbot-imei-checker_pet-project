@@ -5,13 +5,20 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 
+from rest_framework_simplejwt.tokens import AccessToken
+
+
 class UserManager(BaseUserManager):
     def _create_user(self, uid, password, **extra_fields):
         if not uid:
             raise ValueError('Нет ID пользователя.')
         user = self.model(uid=uid, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)        
+        user.set_password(str(password))
+        user.save(using=self._db)   
+
+        access_token = AccessToken.for_user(user)
+        user.token = str(access_token)  # Сохраняем токен в поле 'token'
+        user.save(using=self._db)     
         return user
     
     def create_user(self, uid, password, **extra_fields):
@@ -19,7 +26,7 @@ class UserManager(BaseUserManager):
     
     def create_superuser(self, uid, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
         return self._create_user(uid, password, **extra_fields)
 
 
@@ -33,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     token = models.CharField(
         verbose_name='Токен',
-        max_length=255,
+        max_length=500,
         unique=True,
     )
     joined = models.DateTimeField(
@@ -58,4 +65,4 @@ class User(AbstractBaseUser, PermissionsMixin):
         ordering = ['joined']
 
     def __str__(self):
-        return self.uid
+        return f'{self.uid}'

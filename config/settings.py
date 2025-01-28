@@ -1,6 +1,8 @@
 import dj_database_url
+
 from pathlib import Path
 from decouple import config
+from datetime import timedelta
 
 
 #! Basic
@@ -101,6 +103,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=365 * 100),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365 * 100),
+    'USER_ID_FIELD': 'uid', 
+    'USER_ID_CLAIM': 'uid',
 }
 
 
