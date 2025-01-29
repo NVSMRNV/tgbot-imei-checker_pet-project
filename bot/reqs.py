@@ -5,16 +5,48 @@ from requests import request
 
 API_BASE_URL = config('API_BASE_URL', cast=str)
 
-
-def create_imei_check(imei: str, service: int=22) -> list:
-    url = f'{API_BASE_URL}/api/checks/'
-    token = get_user_token()
+def current_user(uid: int) -> dict:
+    url = f'{API_BASE_URL}/api/users/?uid={uid}'
     headers = {
-        'Authorization': token, 
+        'Content-Type': 'application/json',
+    }
+    response = request(
+        method='GET',
+        url=url,
+        headers=headers,
+    )
+
+    return response.json()
+
+
+def create_user(uid: int) -> dict:
+    url = f'{API_BASE_URL}/api/users/'
+    headers = {
         'Content-Type': 'application/json',
     }
     body = json.dumps({
-        'deviceId': 'imei',
+        'uid': uid
+    })
+    response = request(
+        method='POST',
+        url=url,
+        headers=headers,
+        data=body,
+    )
+
+    return response.json()
+
+
+def create_imei_check(imei: str, uid: int, service=15) -> list:
+    url = f'{API_BASE_URL}/api/checks/'
+    token = current_user(uid=uid)['token']
+
+    headers = {
+        'Authorization': f'Bearer {token}', 
+        'Content-Type': 'application/json',
+    }
+    body = json.dumps({
+        'deviceId': imei,
         'serviceId': service
     })
 
@@ -28,11 +60,11 @@ def create_imei_check(imei: str, service: int=22) -> list:
     return response.json()
 
 
-def get_services_list():
+def get_service_list(uid):
     url = f'{API_BASE_URL}/api/services/'
-    token = get_user_token()
+    token = current_user(uid=uid)['token']
     headers = {
-        'Authorization': token, 
+        'Authorization': f'Bearer {token}',  
         'Content-Type': 'application/json',
     }
     response = request(
