@@ -16,7 +16,7 @@ class CurrentUserService:
         except ObjectDoesNotExist:
             self.errors = {
                 'error': 'Пользователь не найден.', 
-                'details': f'Пользователь с uid={self.inputs['uid']} не существует.'
+                'details': f"Пользователь с uid={self.inputs['uid']} не существует."
             }
             self.response_status = 404
 
