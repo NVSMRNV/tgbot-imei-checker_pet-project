@@ -10,10 +10,10 @@ class ListIMEIServiceService:
         self.inputs = inputs
 
     def process(self):
-        url = f'{config('IMEICHECK_API_BASEURL', cast=str)}/v1/services'
+        url = f"{config('IMEICHECK_API_BASEURL', cast=str)}/v1/services"
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': f'Bearer {config('IMEICHECK_API_TOKEN_SANDBOX', cast=str)}',
+            'Authorization': f"Bearer {config('IMEICHECK_API_TOKEN_SANDBOX', cast=str)}",
             'Accept-Language': 'en',
         }   
         response = requests.request(
