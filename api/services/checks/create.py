@@ -15,7 +15,7 @@ class CreateIMEICheckservice:
         url = f'{config('IMEICHECK_API_BASEURL', cast=str)}/v1/checks'
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': f'Bearer {config('IMEICHECK_API_TOKEN_LIVE', cast=str)}',
+            'Authorization': f'Bearer {config('IMEICHECK_API_TOKEN_SANDBOX', cast=str)}',
         } 
         body = json.dumps({
             'deviceId': self.inputs['deviceId'],
@@ -30,6 +30,8 @@ class CreateIMEICheckservice:
         
         if response.status_code == 201:
             self.result = response.json()
+            if isinstance(self.result.get('properties'), list):
+                self.result['properties'] = {}
         else:
             self.errors = {'error': 'Не удалось выполнить проверку.', 'details': response.text}
         

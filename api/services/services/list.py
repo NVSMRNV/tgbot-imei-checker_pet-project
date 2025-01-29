@@ -13,7 +13,7 @@ class ListIMEIServiceService:
         url = f'{config('IMEICHECK_API_BASEURL', cast=str)}/v1/services'
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': f'Bearer {config('IMEICHECK_API_TOKEN_LIVE', cast=str)}',
+            'Authorization': f'Bearer {config('IMEICHECK_API_TOKEN_SANDBOX', cast=str)}',
             'Accept-Language': 'en',
         }   
         response = requests.request(
