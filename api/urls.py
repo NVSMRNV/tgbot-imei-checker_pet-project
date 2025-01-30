@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from api.views.users import ListCreateUserAPIView
+from api.views.users import AcceptUserAPIView, ListCreateUserAPIView
 
 
 imei_api_urlpatterns = [
@@ -17,6 +17,7 @@ imei_api_urlpatterns = [
 ]
 
 users_api_urlpatterns = [
+    path('users/whitelist/', AcceptUserAPIView.as_view(), name='users_whitelist'),
     path('users/', ListCreateUserAPIView.as_view(), name='users_list_create'),
 ]
 

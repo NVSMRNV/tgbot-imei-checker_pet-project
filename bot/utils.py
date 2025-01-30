@@ -1,18 +1,12 @@
-import json
-import requests
-
-from decouple import config
-
-
-WHITELIST = [1172137145, '@GooS69', 'GooS69', '@Rider87', 'Rider87', '@ansukhareva', 'ansukhareva']
-
-
-def is_user_allowed_by_username(username: str) -> bool:
-    return username in WHITELIST
+from reqs import accept_user
 
 
 def is_user_allowed_by_id(uid: int) -> bool:
-    return uid in WHITELIST
+    user = accept_user(uid=uid)
+
+    if 'error' not in user:
+       return True
+    return False
 
 
 def is_imei_valid(imei: str) -> bool:

@@ -4,9 +4,8 @@ import telebot
 from decouple import config
 
 from utils import (
-    is_user_allowed_by_id,
-    is_user_allowed_by_username,
     is_imei_valid,
+    is_user_allowed_by_id,
 )
 
 from reqs import (
@@ -23,7 +22,7 @@ bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
 def access_required(handler):
     def wrapper(message: telebot.types.Message, *args, **kwargs):
-        if not (is_user_allowed_by_id(message.from_user.id) or is_user_allowed_by_username(message.from_user.username)):
+        if not is_user_allowed_by_id(message.from_user.id):
             bot.send_message(
                 chat_id=message.chat.id,
                 text="У Вас нет доступа к функционалу этого бота."
@@ -42,7 +41,8 @@ def send_welcome(message: telebot.types.Message) -> None:
         bot.send_message(
             message.chat.id,
             "👋 Привет! Рад тебя снова видеть.\n\n"
-            "✅ Твой аккаунт уже создан, так что можешь сразу отправить мне IMEI, и я проверю его для тебя. 🔍"
+            "✅ Твой аккаунт уже создан, так что можешь сразу отправить мне IMEI, и я проверю его для тебя. 🔍",
+            parse_mode="HTML"
         )
     else:
         user = create_user(uid=message.from_user.id)
@@ -85,7 +85,8 @@ def send_service_list(message: telebot.types.Message) -> None:
 
     bot.send_message(
         message.chat.id,
-        f"*Вот список доступных сервисов:*\n\n{answer}', parse_mode='Markdown"
+        f"*Вот список доступных сервисов:*\n\n{answer}'",
+        parse_mode="Markdown"
     )
 
 
@@ -105,7 +106,11 @@ def send_help(message: telebot.types.Message) -> None:
         "Если у вас возникли вопросы, обратитесь к администратору. 📩"
     )
 
-    bot.send_message(message.chat.id, help_text, parse_mode="HTML")
+    bot.send_message(
+        message.chat.id,
+        help_text,
+        parse_mode="HTML"
+    )
 
 
 @bot.message_handler()

@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from api.models.users import User
+from api.models.whitelist import WhiteList
+
+
+admin.site.register(User)
+admin.site.register(WhiteList)
+

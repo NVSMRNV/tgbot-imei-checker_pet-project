@@ -19,6 +19,20 @@ def current_user(uid: int) -> dict:
     return response.json()
 
 
+def accept_user(uid: int) -> bool:
+    url = f'{API_BASE_URL}/api/users/whitelist/?uid={uid}'
+    headers = {
+        'Content-Type': 'application/json',
+    }
+    response = request(
+        method='GET',
+        url=url,
+        headers=headers,
+    )
+
+    return response.json()
+
+
 def create_user(uid: int) -> dict:
     url = f'{API_BASE_URL}/api/users/'
     headers = {
