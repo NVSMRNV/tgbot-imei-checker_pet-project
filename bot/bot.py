@@ -25,7 +25,7 @@ def access_required(handler):
         if not is_user_allowed(message.from_user.id):
             bot.send_message(
                 chat_id=message.chat.id,
-                text='У Вас нет доступа к функционалу этого бота.'
+                text="У Вас нет доступа к функционалу этого бота."
             )
             return
         return handler(message, *args, **kwargs)
@@ -71,20 +71,20 @@ def send_service_list(message: telebot.types.Message) -> None:
     if 'error' in response:
         bot.send_message(
             message.chat.id,
-            f'Возникла ошибка: \n{response['error']}\n{response['details']}'
+            f"Возникла ошибка: \n{response['error']}\n{response['details']}"
         )
         return
 
     answer = ''
     for service in response:
-        answer += f'*🛠️ ID:* `{service['id']}`\n'
-        answer += f'*📌 Title:* `{service['title']}`\n'
-        answer += f'*💰 Price:* `{service['price']}`\n'
-        answer += '-------------------------\n'
+        answer += f"*🛠️ ID:* `{service['id']}`\n"
+        answer += f"*📌 Title:* `{service['title']}`\n"
+        answer += f"*💰 Price:* `{service['price']}`\n"
+        answer += "-------------------------\n"
 
     bot.send_message(
         message.chat.id,
-        f'*Вот список доступных сервисов:*\n\n{answer}', parse_mode='Markdown'
+        f"*Вот список доступных сервисов:*\n\n{answer}', parse_mode='Markdown"
     )
 
 
